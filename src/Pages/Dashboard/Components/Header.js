@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+
+import { withRouter } from "react-router";
+
 
 import { 
   Layout,
@@ -22,28 +24,35 @@ const {
   Header
 } = Layout
 
-const menuMappings = [{
-  title: '退出登录',
-  fucName: 'onLogout',
-}]
 
-const HeaderMenu = (
-  <Menu>
-    {
-      menuMappings.map(({ title, fucName }, index) => (
-        <Menu.Item key={index} onClick={fucName}>
-          <Button type="link">{title}</Button>
-        </Menu.Item>
-      ))
-    }
-  </Menu>
-)
 
 
 const HeaderWrapper = props => {
   const user = localStorage.getItem('user')
+  const { history } = props
+  console.log(props)
+  const onLogout = () => {
+    history.push('/login')
+    localStorage.clear()
+  }
   let userName = 'user'
   let menu = null
+  const menuMappings = [{
+    title: '退出登录',
+    fucName: onLogout,
+  }]
+  
+  const HeaderMenu = (
+    <Menu>
+      {
+        menuMappings.map(({ title, fucName }, index) => (
+          <Menu.Item key={index} onClick={fucName}>
+            <Button type="link">{title}</Button>
+          </Menu.Item>
+        ))
+      }
+    </Menu>
+  )
   if (!isNil(user)) {
     userName = flow(
       prop('user'),
@@ -52,6 +61,7 @@ const HeaderWrapper = props => {
     menu = HeaderMenu
   }
   
+ 
  return (
   <Header className={Style.HeaderWrapper}>
     <div className={Style.UserLogo}>
@@ -69,4 +79,4 @@ const HeaderWrapper = props => {
 
 
 
-export default HeaderWrapper
+export default withRouter(HeaderWrapper)

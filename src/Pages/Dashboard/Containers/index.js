@@ -43,9 +43,7 @@ const Dashboard = (props) => {
  
   return (
     <Layout style={{ height: '100vh' }}>
-      <SliderWrapper
-        location={location}
-      />
+      <SliderWrapper />
       <Layout>
         <HeaderWrapper />
         <ContentWrapper />

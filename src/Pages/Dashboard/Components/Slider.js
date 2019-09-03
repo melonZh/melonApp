@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { withRouter } from "react-router";
 
 import PropTypes from 'prop-types';
 
@@ -16,6 +17,7 @@ import {
   find,
   first,
   isEmpty,
+  findLast,
 } from 'lodash/fp'
 
 
@@ -57,7 +59,8 @@ const getDefaultMenuKeys = pathname => {
   let openKeys = []
   let selectedKeys = []
   let targetMenu = {}
-  const matchMenu = menu.find(({ link }) => pathname.match(link))
+  const matchMenu = findLast(({ link }) => pathname.match(link))(menu)
+ 
   targetMenu = isEmpty(matchMenu) ? menu[0] : matchMenu
   if (targetMenu.children) {
     openKeys = [targetMenu.link]
@@ -96,7 +99,7 @@ const SiderWrapper = props => {
       setDefaultOpenKeys(openKeys)
       setDefaultSelectedKeys(selectedKeys)
     }
-  }, [defaultSelectedKeys, location.pathname])
+  },[defaultSelectedKeys, location.pathname])
   
  
  return (
@@ -160,11 +163,11 @@ const mapDispatchToProps = {
 }
 
 SiderWrapper.prototype = {
-  location: PropTypes.object.isRequired,
+  
 }
 
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(SiderWrapper)
+)(SiderWrapper))
